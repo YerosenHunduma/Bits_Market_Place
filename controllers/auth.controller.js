@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import { issueJWT } from '../utils/sighToken.js';
 
 export const registerUser = async (req, res, next) => {
-    const { firstName, lastName, email, schoolId, username, password } = req.body;
+    const { firstName, lastName, username, email, phoneNumber, schoolId, password } = req.body;
     try {
         const error = validationResult(req);
 
@@ -20,13 +20,14 @@ export const registerUser = async (req, res, next) => {
         await new userModel({
             firstName,
             lastName,
+            username,
+            phoneNumber,
             email,
             schoolId,
-            username,
             password: hashedP
         }).save();
 
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(201).json({ success: true, message: 'User registered successfully' });
     } catch (error) {
         next(error);
     }

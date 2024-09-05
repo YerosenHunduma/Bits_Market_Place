@@ -1,9 +1,11 @@
 import { body } from 'express-validator';
 
 export const registrationValidator = [
-    body('firstName').trim().notEmpty().withMessage('First name is required'),
-    body('schoolId').trim().notEmpty().withMessage('schooId is required'),
-    body('lastName').trim().notEmpty().withMessage('Last name is required'),
+    body('firstName').trim().notEmpty().withMessage('First name field is required'),
+    body('username').trim().notEmpty().withMessage('username field is required'),
+    body('phoneNumber').trim().notEmpty().withMessage('phone number field is required'),
+    body('schoolId').trim().notEmpty().withMessage('schooId field is required'),
+    body('lastName').trim().notEmpty().withMessage('Last name field is required'),
     body('email').trim().isEmail().withMessage('Please enter a valid email').normalizeEmail().toLowerCase(),
     body('password')
         .trim()
