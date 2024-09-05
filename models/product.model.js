@@ -20,7 +20,6 @@ const productSchema = new Schema(
         price: { type: Number, required: true },
         isApproved: { type: Boolean, default: false },
         status: { type: String, enum: ['available', 'sold', 'lent', 'pending'], default: 'pending' },
-        bids: [{ type: Schema.Types.ObjectId, ref: 'Bid' }],
         category: { type: Schema.Types.ObjectId, ref: 'Category', required: true }
     },
     { timestamp: true, versionKey: true }
