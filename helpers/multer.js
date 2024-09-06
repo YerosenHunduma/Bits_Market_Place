@@ -1,7 +1,7 @@
 import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
-import { errorHandler } from '../utils/errorHandler';
+import { errorHandler } from '../utils/errorHandler.js';
 
 if (!fs.existsSync('./uploads')) {
     fs.mkdirSync('./uploads');

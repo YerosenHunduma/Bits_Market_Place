@@ -7,6 +7,7 @@ import { issueJWT } from '../utils/sighToken.js';
 
 export const registerUser = async (req, res, next) => {
     const { firstName, lastName, username, email, phoneNumber, schoolId, password } = req.body;
+
     try {
         const error = validationResult(req);
 
@@ -27,7 +28,7 @@ export const registerUser = async (req, res, next) => {
             password: hashedP
         }).save();
 
-        res.status(201).json({ success: true, message: 'User registered successfully' });
+        res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         next(error);
     }
@@ -46,8 +47,7 @@ export const signin = async (req, res, next) => {
         if (!isMatch) {
             return next(new errorHandler('Invalid school ID or password', 401));
         }
-
-        const issuedToken = issueJWT(user.email);
+        const issuedToken = issueJWT(user._id.toString());
 
         const { password: pass, ...userInfo } = user._doc;
 
@@ -55,4 +55,12 @@ export const signin = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
+
+export const signOut = async (req, res) => {
+    res.cookie('access_token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
+    res.status(200).json({ success: true, message: 'Successfully signed out' });
 };

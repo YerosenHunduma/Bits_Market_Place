@@ -20,9 +20,12 @@ const productSchema = new Schema(
         price: { type: Number, required: true },
         isApproved: { type: Boolean, default: false },
         status: { type: String, enum: ['available', 'sold', 'lent', 'pending'], default: 'pending' },
-        category: { type: Schema.Types.ObjectId, ref: 'Category', required: true }
+        category: { type: String, required: true }
     },
-    { timestamp: true, versionKey: true }
+    {
+        timestamps: true,
+        versionKey: false
+    }
 );
 
 export default model('Product', productSchema);
