@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.post('/create-product', isAuthenticated, uploadImageFromLocalToServer.array('file', 10), product.createProduct);
 router.get('/get-all-products', product.getAllProducts);
+router.get('/get-product/:id', product.getProduct);
 
 export default router;
