@@ -26,11 +26,10 @@ export const createProduct = async (req, res, next) => {
 
 export const getAllProducts = async (req, res, next) => {
     const resPerPage = 8;
-    console.log(req.query);
     try {
-        const prodApiFilter = new apiFilter(productModel, req.query).search();
-
+        const prodApiFilter = new apiFilter(productModel, req.query).search().filters().sort();
         let products = await prodApiFilter.query;
+
         const filteredProductCount = products.length;
 
         prodApiFilter.pagination(resPerPage);

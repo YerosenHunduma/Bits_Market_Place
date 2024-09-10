@@ -15,7 +15,19 @@ export class apiFilter {
             : {};
 
         this.query = this.query.find({ ...keyword });
+        return this;
+    }
 
+    filters() {
+        const queryCopy = { ...this.queryStr };
+
+        const fieldsToRemove = ['keyword', 'page', 'sortBy'];
+        fieldsToRemove.forEach((el) => delete queryCopy[el]);
+
+        let queryStr = JSON.stringify(queryCopy);
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+
+        this.query = this.query.find(JSON.parse(queryStr));
         return this;
     }
 
@@ -24,6 +36,12 @@ export class apiFilter {
         const skip = (currentPage - 1) * resPerPage;
         this.query = this.query.limit(resPerPage).skip(skip);
 
+        return this;
+    }
+
+    sort() {
+        const sortBy = this.queryStr.sortBy;
+        this.query = this.query.sort(sortBy);
         return this;
     }
 }
