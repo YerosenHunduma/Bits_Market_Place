@@ -18,6 +18,7 @@ const productSchema = new Schema(
             }
         ],
         price: { type: Number, required: true },
+        bids: [{ type: Schema.Types.ObjectId, ref: 'Bid' }],
         isApproved: { type: Boolean, default: false },
         status: { type: String, enum: ['available', 'sold', 'lent', 'pending'], default: 'pending' },
         category: { type: String, required: true }

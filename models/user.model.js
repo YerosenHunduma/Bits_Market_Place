@@ -21,7 +21,14 @@ const userSchema = new Schema(
         },
         isBlocked: { type: Boolean, default: false },
         purchasedProdcuts: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
-        profileImg: { type: String, default: '' },
+        profileImg: {
+            public_id: {
+                type: String
+            },
+            secure_url: {
+                type: String
+            }
+        },
         wishlist: [
             {
                 type: Schema.Types.ObjectId,
