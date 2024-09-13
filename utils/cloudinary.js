@@ -33,13 +33,16 @@ export const uploadToCloudinary = async (localFilePath, mainFolderName, profileC
 };
 
 export const deleteFromCloudinary = async (profileCloudId) => {
-    console.log(profileCloudId);
-    await cloudinary.uploader
-        .destroy(profileCloudId)
-        .then(() => {
-            console.log('picture deleted successfully');
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    try {
+        const result = await cloudinary.uploader.destroy(profileCloudId);
+
+        return {
+            result
+        };
+    } catch (err) {
+        return {
+            message: 'Failed to delete image',
+            error: err.message
+        };
+    }
 };

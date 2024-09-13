@@ -46,6 +46,28 @@ export const updateProduct = async (req, res, next) => {
     }
 };
 
+export const deletedProduct = async (req, res, next) => {
+    try {
+        const { _id } = req.body;
+        const product = await productModel.findById(_id);
+        if (!product) {
+            return next(new errorHandler('Product not found', 404));
+        }
+        const deletedImg = await Promise.all(product.images.map(async (image) => await deleteFromCloudinary(image.public_id)));
+
+        const failedDeletion = deletedImg.some((img) => img.result.result !== 'ok');
+
+        if (failedDeletion) {
+            return next(new errorHandler('Failed to delete Prodcut', 500));
+        }
+
+        await product.deleteOne();
+        res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export const getAllProducts = async (req, res, next) => {
     const resPerPage = 8;
     try {
@@ -93,23 +115,23 @@ export const getUserProduct = async (req, res, next) => {
 };
 
 export const deleteImage = async (req, res, next) => {
-    const mainFolderName = 'products';
     const { _id, public_id } = req.body;
-    console.log(req.body);
     try {
         const deletedImg = await deleteFromCloudinary(public_id);
-        if (!deletedImg) {
+
+        if (deletedImg.result.result !== 'ok') {
             return next(new errorHandler('Failed to delete image', 500));
         }
-        console.log(deletedImg);
+
         const product = await productModel.findById(_id);
+
         if (!product) {
             return next(new errorHandler('Prodcut not found', 404));
         }
 
         product.images = product.images.filter((image) => image.public_id !== public_id);
-        console.log(product);
         await product.save();
+
         res.status(200).json({ message: 'Image deleted successfully' });
     } catch (error) {
         next(error);
