@@ -46,9 +46,8 @@ export const sellerGetBids = async (req, res, next) => {
 };
 
 export const bidderGetBids = async (req, res, next) => {
-    const { bidderId } = req.params;
     try {
-        const bids = await bidModel.find({ bidderId: bidderId });
+        const bids = await bidModel.find({ bidderId: req.userId });
         if (!bids) {
             return next(new errorHandler('You have no bid history', 404));
         }
@@ -58,9 +57,21 @@ export const bidderGetBids = async (req, res, next) => {
     }
 };
 
-export const adminBidAction = (req, res, next) => {
+export const sellerRejectAction = async (req, res, next) => {
+    const { bidId } = req.params;
     try {
+        const bid = await bidModel.findByIdAndUpdate(bidId, { status: 'rejected' });
+
+        res.status(200).json({ message: 'bid status updated successfully' });
     } catch (error) {
         next(error);
     }
 };
+
+export const sellerAcceptAction =async (req, res,next) => {
+    try {
+        
+    } catch (error) {
+        next(error);
+    }
+}

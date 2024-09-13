@@ -33,6 +33,7 @@ export const uploadToCloudinary = async (localFilePath, mainFolderName, profileC
 };
 
 export const deleteFromCloudinary = async (profileCloudId) => {
+    console.log(profileCloudId);
     await cloudinary.uploader
         .destroy(profileCloudId)
         .then(() => {
