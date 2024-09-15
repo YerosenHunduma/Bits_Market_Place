@@ -83,14 +83,24 @@ export const webhook = async (req, res, next) => {
             if (!user) {
                 return next(new errorHandler('Seller not found', 404));
             }
-            console.log(typeof balance);
-            console.log(typeof user.account_balance);
+
             user.account_balance += balance;
 
             await user.save();
-            console.log(user.account_balance);
         }
         res.sendStatus(200);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getTransactions = async (req, res, next) => {
+    const { sellerId } = req.query;
+
+    try {
+        const transactions = await paymentModel.find({ sellerId });
+
+        res.status(200).json(transactions);
     } catch (error) {
         next(error);
     }
