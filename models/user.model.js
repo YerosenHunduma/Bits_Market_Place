@@ -19,7 +19,7 @@ const userSchema = new Schema(
             type: Boolean,
             default: false
         },
-        account_balance: { type: Number, defualt: 0 },
+        account_balance: { type: String, default: '0' },
         isBlocked: { type: Boolean, default: false },
         purchasedProdcuts: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
         profileImg: {

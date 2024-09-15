@@ -61,7 +61,6 @@ export const webhook = async (req, res, next) => {
     try {
         const hash = crypto.createHmac('sha256', secret).update(JSON.stringify(req.body)).digest('hex');
         if (hash == req.headers['x-chapa-signature']) {
-            console.log(req.body.tx_ref);
             const payment = await paymentModel.findOne({ tx_ref: req.body.tx_ref });
             if (!payment) {
                 return next(new errorHandler('Payment not found', 404));
@@ -85,8 +84,9 @@ export const webhook = async (req, res, next) => {
                 return next(new errorHandler('Seller not found', 404));
             }
             user.account_balance += balance;
-            console.log(user.account_balance);
+
             await user.save();
+            console.log(user.account_balance);
         }
         res.sendStatus(200);
     } catch (error) {
