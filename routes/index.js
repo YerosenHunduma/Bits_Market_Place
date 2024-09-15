@@ -15,7 +15,7 @@ router.use('/product', productRoutes);
 router.use('/category', categoryRoutes);
 router.use('/user', userRoutes);
 router.use('/bid', isAuthenticated, bidRoutes);
-router.use('/payment', isAuthenticated, paymentRoutes);
+router.use('/payment', paymentRoutes);
 router.use(globalErrorHandler);
 
 export default router;
