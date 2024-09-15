@@ -1,5 +1,6 @@
 import paymentModel from '../models/payment.model.js';
 import { Chapa } from 'chapa-nodejs';
+import { errorHandler } from '../utils/errorHandler.js';
 
 const chapa = new Chapa({
     secretKey: process.env.Chapa_Secret_key
@@ -48,6 +49,35 @@ export const verify = async (req, res, next) => {
         const response = await chapa.verify({
             tx_ref
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const webhook = async (req, res, next) => {
+    const secret = process.env.webhook_secret_key;
+    try {
+        const hash = crypto.createHmac('sha256', secret).update(JSON.stringify(req.body)).digest('hex');
+        if (hash == req.headers['x-chapa-signature']) {
+            const payment = await paymentModel.findOne({ email: req.body.email });
+            if (!payment) {
+                return next(new errorHandler('Payment not found', 404));
+            }
+            const amount1 = req.body.amount - req.body.charge;
+            const bits_transaction_charge = (amount1 * 3) / 100;
+            const balance = amount1 - bits_transaction_charge;
+            payment.status = req.body.status;
+            payment.currency = req.body.currency;
+            payment.created_at = req.body.created_at;
+            payment.updated_at = req.body.updated_at;
+            payment.payment_method = req.body.payment_method;
+            payment.reference = req.body.reference;
+            payment.chapa_transactio_charge = req.body.charge;
+            payment.bits_transaction_charge = bits_transaction_charge;
+            payment.balance = balance;
+            res.send(200);
+        }
+        return res.status(401).json({ error: 'Invalid signature' });
     } catch (error) {
         next(error);
     }

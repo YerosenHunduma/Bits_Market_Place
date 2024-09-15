@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.post('/pay', payment.paymentService);
 router.post('/verify', payment.verify);
+router.post('/webhook', payment.webhook);
 
 export default router;

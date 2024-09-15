@@ -1,6 +1,4 @@
 import fs from 'fs';
-import { cloudinaryConfig } from '../config/cloudinaryConfig.js';
-
 import dotenv from 'dotenv';
 dotenv.config();
 import { v2 as cloudinary } from 'cloudinary';
