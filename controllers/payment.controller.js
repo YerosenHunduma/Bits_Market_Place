@@ -83,6 +83,8 @@ export const webhook = async (req, res, next) => {
             if (!user) {
                 return next(new errorHandler('Seller not found', 404));
             }
+            console.log(typeof balance);
+            console.log(typeof user.account_balance);
             user.account_balance += balance;
 
             await user.save();
