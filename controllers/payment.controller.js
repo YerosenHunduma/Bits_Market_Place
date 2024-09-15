@@ -2,6 +2,7 @@ import paymentModel from '../models/payment.model.js';
 import { Chapa } from 'chapa-nodejs';
 import crypto from 'crypto';
 import { errorHandler } from '../utils/errorHandler.js';
+import userModel from '../models/user.model.js';
 
 const chapa = new Chapa({
     secretKey: process.env.Chapa_Secret_key
@@ -78,6 +79,13 @@ export const webhook = async (req, res, next) => {
             payment.bits_transaction_charge = bits_transaction_charge;
             payment.balance = balance;
             await payment.save();
+
+            const user = await userModel.findById(sellerId);
+            if (!user) {
+                return next(new errorHandler('Seller not found', 404));
+            }
+            user.account_balance += balance;
+            await user.save();
         }
         res.sendStatus(200);
     } catch (error) {
