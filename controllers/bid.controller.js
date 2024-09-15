@@ -9,7 +9,7 @@ export const bidRequest = async (req, res, next) => {
     const { productId, bidderId, sellerId, amount, message, productName, bidderName } = req.body;
 
     try {
-        const newBid = await bidModel.create({ productId, bidderId, amount, message });
+        const newBid = await bidModel.create({ productId, bidderId, sellerId, amount, productName, message });
         const product = await productModel.findByIdAndUpdate(productId, { $push: { bids: newBid._id } });
         if (!product) {
             return next(new errorHandler('product is not found', 404));
@@ -68,10 +68,13 @@ export const sellerRejectAction = async (req, res, next) => {
     }
 };
 
-export const sellerAcceptAction =async (req, res,next) => {
+export const sellerAcceptAction = async (req, res, next) => {
+    const { bidId } = req.params;
     try {
-        
+        const bid = await bidModel.findByIdAndUpdate(bidId, { status: 'accepted' });
+
+        res.status(200).json({ message: 'bid status updated successfully' });
     } catch (error) {
         next(error);
     }
-}
+};
