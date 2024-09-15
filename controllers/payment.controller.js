@@ -1,5 +1,6 @@
 import paymentModel from '../models/payment.model.js';
 import { Chapa } from 'chapa-nodejs';
+import crypto from 'crypto';
 import { errorHandler } from '../utils/errorHandler.js';
 
 const chapa = new Chapa({
