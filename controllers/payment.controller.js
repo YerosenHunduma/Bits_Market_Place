@@ -60,6 +60,7 @@ export const webhook = async (req, res, next) => {
     try {
         const hash = crypto.createHmac('sha256', secret).update(JSON.stringify(req.body)).digest('hex');
         if (hash == req.headers['x-chapa-signature']) {
+            console.log(req.body.tx_ref);
             const payment = await paymentModel.findOne({ tx_ref: req.body.tx_ref });
             if (!payment) {
                 return next(new errorHandler('Payment not found', 404));
@@ -76,9 +77,9 @@ export const webhook = async (req, res, next) => {
             payment.chapa_transactio_charge = req.body.charge;
             payment.bits_transaction_charge = bits_transaction_charge;
             payment.balance = balance;
-            res.send(200);
+            await payment.save();
         }
-        return res.status(401).json({ error: 'Invalid signature' });
+        res.sendStatus(200);
     } catch (error) {
         next(error);
     }
