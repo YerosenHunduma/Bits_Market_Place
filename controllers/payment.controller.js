@@ -60,7 +60,7 @@ export const webhook = async (req, res, next) => {
     try {
         const hash = crypto.createHmac('sha256', secret).update(JSON.stringify(req.body)).digest('hex');
         if (hash == req.headers['x-chapa-signature']) {
-            const payment = await paymentModel.findOne({ email: req.body.email });
+            const payment = await paymentModel.findOne({ tx_ref: req.body.tx_ref });
             if (!payment) {
                 return next(new errorHandler('Payment not found', 404));
             }
