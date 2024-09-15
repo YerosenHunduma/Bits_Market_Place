@@ -80,7 +80,7 @@ export const webhook = async (req, res, next) => {
             payment.balance = balance;
             await payment.save();
 
-            const user = await userModel.findById(sellerId);
+            const user = await userModel.findById(payment.sellerId);
             if (!user) {
                 return next(new errorHandler('Seller not found', 404));
             }
