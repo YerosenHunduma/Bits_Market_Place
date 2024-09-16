@@ -5,23 +5,21 @@ export class apiFilter {
     }
 
     search() {
-        const keyword = this.queryStr.keyword
-            ? {
-                  name: {
-                      $regex: this.queryStr.keyword,
-                      $options: 'i'
-                  }
-              }
-            : {};
+        const keyword = this.queryStr.keyword;
 
-        this.query = this.query.find({ ...keyword });
+        let filters = { status: 'pending' };
+        if (keyword) {
+            filters.$or = [{ name: { $regex: keyword, $options: 'i' } }];
+        }
+
+        this.query = this.query.find({ ...filters });
         return this;
     }
 
     filters() {
         const queryCopy = { ...this.queryStr };
 
-        const fieldsToRemove = ['keyword', 'page', 'sortBy'];
+        const fieldsToRemove = ['keyword', 'filters', 'page', 'sortBy'];
         fieldsToRemove.forEach((el) => delete queryCopy[el]);
 
         let queryStr = JSON.stringify(queryCopy);
