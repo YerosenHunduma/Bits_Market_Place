@@ -12,5 +12,6 @@ router.get('/get-all-products', product.getAllProducts);
 router.get('/get-product/:id', product.getProduct);
 router.get('/get-user-products', isAuthenticated, product.getUserProduct);
 router.delete('/delete-product-img', isAuthenticated, product.deleteImage);
+router.put('/approve-products', isAuthenticated, product.approveProduct);
 
 export default router;
