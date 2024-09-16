@@ -2,6 +2,7 @@ import contactUsModel from '../models/contactUs.model.js';
 
 export const contactUs = async (req, res, next) => {
     const { firstName, lastName, email, phoneNumber, message } = req.body;
+   
     try {
         await contactUsModel.create({
             ...req.body

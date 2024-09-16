@@ -6,6 +6,7 @@ import categoryRoutes from './category.routes.js';
 import userRoutes from './user.routes.js';
 import bidRoutes from './bid.routes.js';
 import paymentRoutes from './payment.routes.js';
+import contactRoutes from './contact.routes.js';
 import { isAuthenticated } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -16,6 +17,7 @@ router.use('/category', categoryRoutes);
 router.use('/user', userRoutes);
 router.use('/bid', isAuthenticated, bidRoutes);
 router.use('/payment', paymentRoutes);
+router.use('/contact', contactRoutes);
 router.use(globalErrorHandler);
 
 export default router;
