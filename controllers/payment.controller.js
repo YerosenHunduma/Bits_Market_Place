@@ -86,6 +86,7 @@ export const webhook = async (req, res, next) => {
                 return next(new errorHandler('Product not found', 404));
             }
             product.status = 'sold';
+            await product.save();
 
             const user = await userModel.findById(payment.sellerId);
             if (!user) {

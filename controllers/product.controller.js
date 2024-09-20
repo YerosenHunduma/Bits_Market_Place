@@ -137,3 +137,16 @@ export const deleteImage = async (req, res, next) => {
         next(error);
     }
 };
+
+export const approveProduct = async (req, res, next) => {
+    const { productId } = req.body;
+    try {
+        const product = await productModel.findByIdAndUpdate(productId, { status: 'available' }, { new: true });
+        if (!product) {
+            return next(new errorHandler('Product not found', 404));
+        }
+        res.status(200).json({ message: 'Product approved successfully' });
+    } catch (error) {
+        next(error);
+    }
+};
