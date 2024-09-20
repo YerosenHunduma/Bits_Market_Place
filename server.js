@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 app.use(
     cors({
-        origin: ['http://localhost:5175', 'https://bits-shop.onrender.com/', 'https://bits-shop.vercel.app/'],
+        origin: ['http://localhost:5175', 'https://bits-shop.onrender.com', 'https://bits-shop.vercel.app/'],
         credentials: true
     })
 );
